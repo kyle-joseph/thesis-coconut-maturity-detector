@@ -1,4 +1,6 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
+import 'package:coconut_maturity_detector/screens/collection/create_collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // ignore: use_key_in_widget_constructors, must_be_immutable
@@ -92,19 +94,23 @@ class HomeBody extends StatelessWidget {
                       child: Column(
                         children: [
                           homeButton(
-                              context,
-                              "New Collection",
-                              const Icon(
-                                Icons.add,
-                                size: 35,
-                              )),
+                            context,
+                            "New Collection",
+                            const Icon(
+                              Icons.add,
+                              size: 35,
+                            ),
+                            CreateCollection(),
+                          ),
                           homeButton(
-                              context,
-                              "View Collections",
-                              const Icon(
-                                Icons.library_books,
-                                size: 35,
-                              ))
+                            context,
+                            "View Collections",
+                            const Icon(
+                              Icons.library_books,
+                              size: 35,
+                            ),
+                            CreateCollection(),
+                          )
                         ],
                       ),
                     )
@@ -118,23 +124,29 @@ class HomeBody extends StatelessWidget {
     );
   }
 
-  Widget homeButton(BuildContext context, String label, Icon icon) {
+  Widget homeButton(BuildContext context, String label, Icon icon, var route) {
     return Container(
       margin: const EdgeInsets.only(
         bottom: 25,
       ),
       child: ElevatedButton.icon(
-        icon: icon,
-        label: Text(
-          label,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: AppTheme.primaryColor,
-          minimumSize: const Size(228, 60),
-        ),
-        onPressed: () {},
-      ),
+          icon: icon,
+          label: Text(
+            label,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: AppTheme.primaryColor,
+            minimumSize: const Size(228, 60),
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => route,
+              ),
+            );
+          }),
     );
   }
 

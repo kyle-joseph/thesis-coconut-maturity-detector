@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.coconut_maturity_detector">
    <application
-        android:label="coconut_maturity_detector"
+        android:label="Coco Detect"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
