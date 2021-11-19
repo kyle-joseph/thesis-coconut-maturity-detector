@@ -143,7 +143,7 @@ class HomeBody extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          padding: const EdgeInsets.only(
+          margin: const EdgeInsets.only(
             bottom: 30,
           ),
           child: Column(
@@ -152,7 +152,7 @@ class HomeBody extends StatelessWidget {
                 "John Doe Buko",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: AppTheme.primaryColorLight,
+                  color: AppTheme.primaryColor,
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
@@ -162,12 +162,12 @@ class HomeBody extends StatelessWidget {
                 children: const [
                   Icon(
                     Icons.store,
-                    color: AppTheme.primaryColor,
+                    color: AppTheme.primaryColorLight,
                   ),
                   Text(
                     " Store",
                     style: TextStyle(
-                      color: AppTheme.primaryColor,
+                      color: AppTheme.primaryColorLight,
                       fontSize: 23,
                       fontWeight: FontWeight.bold,
                     ),
@@ -184,8 +184,8 @@ class HomeBody extends StatelessWidget {
               const Text(
                 "Maria Doe",
                 style: TextStyle(
-                  color: AppTheme.primaryColorLight,
-                  fontSize: 25,
+                  color: AppTheme.primaryColor,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -194,12 +194,12 @@ class HomeBody extends StatelessWidget {
                 children: const [
                   Icon(
                     Icons.person,
-                    color: AppTheme.primaryColor,
+                    color: AppTheme.primaryColorLight,
                   ),
                   Text(
                     " Staff",
                     style: TextStyle(
-                      color: AppTheme.primaryColor,
+                      color: AppTheme.primaryColorLight,
                       fontSize: 23,
                       fontWeight: FontWeight.bold,
                     ),
