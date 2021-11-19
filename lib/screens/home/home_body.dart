@@ -34,7 +34,10 @@ class HomeBody extends StatelessWidget {
             'Coconut Maturity Detector',
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 35,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -44,6 +47,7 @@ class HomeBody extends StatelessWidget {
   Widget homeBody(BuildContext context) {
     return Expanded(
       child: Container(
+        width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(40),
@@ -51,7 +55,161 @@ class HomeBody extends StatelessWidget {
           ),
           color: Colors.white,
         ),
+        child: Stack(
+          children: [
+            Positioned(
+              right: -40,
+              bottom: 0,
+              child: Image.asset(
+                'assets/images/coconut_tree.png',
+                height: MediaQuery.of(context).size.height * 0.50,
+              ),
+            ),
+            Positioned(
+              left: -7,
+              bottom: 0,
+              child: Image.asset(
+                'assets/images/coconut.png',
+                height: MediaQuery.of(context).size.height * 0.22,
+              ),
+            ),
+            SingleChildScrollView(
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    // ignore: sized_box_for_whitespace
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.33,
+                      child: homeStoreAndStaff(context),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.only(
+                        top: 25,
+                      ),
+                      child: Column(
+                        children: [
+                          homeButton(
+                              context,
+                              "New Collection",
+                              const Icon(
+                                Icons.add,
+                                size: 35,
+                              )),
+                          homeButton(
+                              context,
+                              "View Collections",
+                              const Icon(
+                                Icons.library_books,
+                                size: 35,
+                              ))
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget homeButton(BuildContext context, String label, Icon icon) {
+    return Container(
+      margin: const EdgeInsets.only(
+        bottom: 25,
+      ),
+      child: ElevatedButton.icon(
+        icon: icon,
+        label: Text(
+          label,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: AppTheme.primaryColor,
+          minimumSize: const Size(228, 60),
+        ),
+        onPressed: () {},
+      ),
+    );
+  }
+
+  Widget homeStoreAndStaff(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.only(
+            bottom: 30,
+          ),
+          child: Column(
+            children: [
+              const Text(
+                "John Doe Buko",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppTheme.primaryColorLight,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.store,
+                    color: AppTheme.primaryColor,
+                  ),
+                  Text(
+                    " Store",
+                    style: TextStyle(
+                      color: AppTheme.primaryColor,
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        // ignore: avoid_unnecessary_containers
+        Container(
+          child: Column(
+            children: [
+              const Text(
+                "Maria Doe",
+                style: TextStyle(
+                  color: AppTheme.primaryColorLight,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.person,
+                    color: AppTheme.primaryColor,
+                  ),
+                  Text(
+                    " Staff",
+                    style: TextStyle(
+                      color: AppTheme.primaryColor,
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }
