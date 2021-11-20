@@ -1,4 +1,6 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
+import 'package:coconut_maturity_detector/screens/collection_single/collection_summary.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // ignore: use_key_in_widget_constructors
@@ -40,18 +42,19 @@ class _CollectionListBodyState extends State<CollectionListBody> {
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
+            spreadRadius: 1,
+            blurRadius: 3,
             offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Column(
         children: [
+          // ignore: avoid_unnecessary_containers
           Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -72,6 +75,7 @@ class _CollectionListBodyState extends State<CollectionListBody> {
               ],
             ),
           ),
+          // ignore: avoid_unnecessary_containers
           Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -92,7 +96,14 @@ class _CollectionListBodyState extends State<CollectionListBody> {
                       primary: Colors.orangeAccent,
                       minimumSize: const Size(80, 30),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => const CollectionSummaryScreen(),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Padding(

@@ -1,9 +1,9 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
-import 'package:coconut_maturity_detector/screens/collection/collection_list_body.dart';
+import 'package:coconut_maturity_detector/screens/collection_single/collection_summary_body.dart';
 import 'package:flutter/material.dart';
 
-class CollectionListScreen extends StatelessWidget {
-  const CollectionListScreen({Key? key}) : super(key: key);
+class CollectionSummaryScreen extends StatelessWidget {
+  const CollectionSummaryScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class CollectionListScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Collection List',
+            'Collection Summary',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 23,
@@ -19,7 +19,7 @@ class CollectionListScreen extends StatelessWidget {
           ),
           backgroundColor: AppTheme.primaryColor,
         ),
-        body: CollectionListBody(),
+        body: CollectionSummaryBody(),
         resizeToAvoidBottomInset: false,
       ),
     );
