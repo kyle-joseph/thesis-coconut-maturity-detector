@@ -82,14 +82,14 @@ class _CreateAccountState extends State<CreateAccount> {
                         padding: const EdgeInsets.only(
                           bottom: 20,
                         ),
-                        child: registerTextField(context, "Staff Name", 0),
+                        child: registerTextField(
+                            context, "Business/Store Name", 0),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
                           bottom: 10,
                         ),
-                        child: registerTextField(
-                            context, "Business/Store Name", 1),
+                        child: registerTextField(context, "Staff Name", 1),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,

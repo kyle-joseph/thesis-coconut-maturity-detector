@@ -60,6 +60,14 @@ class HomeBody extends StatelessWidget {
         child: Stack(
           children: [
             Positioned(
+              bottom: 0,
+              right: 0,
+              child: Image.asset(
+                'assets/images/create_background_2.png',
+                width: MediaQuery.of(context).size.width,
+              ),
+            ),
+            Positioned(
               right: -40,
               bottom: 0,
               child: Image.asset(
@@ -68,11 +76,11 @@ class HomeBody extends StatelessWidget {
               ),
             ),
             Positioned(
-              left: -7,
-              bottom: 0,
+              left: 0,
+              bottom: 5,
               child: Image.asset(
                 'assets/images/coconut.png',
-                height: MediaQuery.of(context).size.height * 0.22,
+                height: MediaQuery.of(context).size.height * 0.17,
               ),
             ),
             SingleChildScrollView(

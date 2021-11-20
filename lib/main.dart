@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           primaryColorLight: AppTheme.primaryColorLight,
           fontFamily: AppTheme.fontFamily,
         ),
-        home: const CreateAccount(),
+        home: HomeScreen(),
       ),
     );
   }

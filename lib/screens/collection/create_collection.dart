@@ -10,6 +10,8 @@ class CreateCollection extends StatefulWidget {
 }
 
 class _CreateCollectionState extends State<CreateCollection> {
+  Color _textFieldColor = Colors.grey;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,6 +36,14 @@ class _CreateCollectionState extends State<CreateCollection> {
     return Stack(
       children: [
         Positioned(
+          bottom: 0,
+          right: 0,
+          child: Image.asset(
+            'assets/images/create_background_2.png',
+            width: MediaQuery.of(context).size.width,
+          ),
+        ),
+        Positioned(
           right: -40,
           bottom: 0,
           child: Image.asset(
@@ -42,92 +52,96 @@ class _CreateCollectionState extends State<CreateCollection> {
           ),
         ),
         Positioned(
-          left: -7,
-          bottom: 0,
+          left: 0,
+          bottom: 5,
           child: Image.asset(
             'assets/images/coconut.png',
-            height: MediaQuery.of(context).size.height * 0.22,
+            height: MediaQuery.of(context).size.height * 0.17,
           ),
         ),
-        SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.only(
-              top: 15,
-            ),
-            child: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 10,
-                  ),
+        Container(
+          padding: const EdgeInsets.only(
+            top: 30,
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Focus(
                   child: TextField(
                     decoration: InputDecoration(
                       fillColor: AppTheme.primaryColor,
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
+                      border: const OutlineInputBorder(),
+                      focusedBorder: const OutlineInputBorder(
                         // width: 0.0 produces a thin "hairline" border
                         borderSide: BorderSide(
                           color: AppTheme.primaryColor,
                           width: 3,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: AppTheme.primaryColor,
+                          color: Colors.grey,
                           width: 3,
                         ),
                       ),
                       labelText: 'Collection Name',
                       labelStyle: TextStyle(
-                        color: AppTheme.primaryColor,
+                        color: _textFieldColor,
                       ),
                     ),
                   ),
+                  onFocusChange: (hasFocus) {
+                    setState(() => _textFieldColor =
+                        hasFocus ? AppTheme.primaryColor : Colors.grey);
+                  },
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                      ),
-                      child: ElevatedButton(
-                        child: const Text(
-                          'Cancel',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: AppTheme.errorColor,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                      ),
-                      child: ElevatedButton(
-                        child: const Text(
-                          'Create',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
+                    child: ElevatedButton(
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontSize: 18,
                         ),
-                        style: ElevatedButton.styleFrom(
-                          primary: AppTheme.primaryColor,
-                        ),
-                        onPressed: () {},
                       ),
+                      style: ElevatedButton.styleFrom(
+                        primary: AppTheme.errorColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
-                  ],
-                )
-              ],
-            ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
+                    ),
+                    child: ElevatedButton(
+                      child: const Text(
+                        'Create',
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: AppTheme.primaryColor,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                ],
+              )
+            ],
           ),
         ),
       ],
