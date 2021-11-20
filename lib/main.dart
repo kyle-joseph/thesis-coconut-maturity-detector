@@ -1,5 +1,6 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
 import 'package:coconut_maturity_detector/screens/account/create_account.dart';
+import 'package:coconut_maturity_detector/screens/collection/collection_list.dart';
 import 'package:coconut_maturity_detector/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

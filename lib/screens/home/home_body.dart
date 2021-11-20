@@ -1,4 +1,5 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
+import 'package:coconut_maturity_detector/screens/collection/collection_list.dart';
 import 'package:coconut_maturity_detector/screens/collection/create_collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +118,7 @@ class HomeBody extends StatelessWidget {
                               Icons.library_books,
                               size: 35,
                             ),
-                            CreateCollection(),
+                            const CollectionListScreen(),
                           )
                         ],
                       ),
@@ -188,8 +189,8 @@ class HomeBody extends StatelessWidget {
                     " Store",
                     style: TextStyle(
                       color: AppTheme.primaryColorLight,
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -220,8 +221,8 @@ class HomeBody extends StatelessWidget {
                     " Staff",
                     style: TextStyle(
                       color: AppTheme.primaryColorLight,
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],

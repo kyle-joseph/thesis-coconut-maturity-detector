@@ -22,7 +22,7 @@ class _CreateCollectionState extends State<CreateCollection> {
             'Create Collection',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: 23,
             ),
           ),
           backgroundColor: AppTheme.primaryColor,
