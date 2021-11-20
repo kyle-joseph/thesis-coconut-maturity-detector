@@ -14,6 +14,7 @@ class _CreateCollectionState extends State<CreateCollection> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text(
             'Create Collection',
@@ -48,83 +49,85 @@ class _CreateCollectionState extends State<CreateCollection> {
             height: MediaQuery.of(context).size.height * 0.22,
           ),
         ),
-        Container(
-          padding: const EdgeInsets.only(
-            top: 15,
-          ),
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 10,
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    fillColor: AppTheme.primaryColor,
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                      // width: 0.0 produces a thin "hairline" border
-                      borderSide: BorderSide(
-                        color: AppTheme.primaryColor,
-                        width: 3,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppTheme.primaryColor,
-                        width: 3,
-                      ),
-                    ),
-                    labelText: 'Collection Name',
-                    labelStyle: TextStyle(
-                      color: AppTheme.primaryColor,
-                    ),
+        SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.only(
+              top: 15,
+            ),
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 10,
                   ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 5,
-                    ),
-                    child: ElevatedButton(
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(
-                          fontSize: 18,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      fillColor: AppTheme.primaryColor,
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        // width: 0.0 produces a thin "hairline" border
+                        borderSide: BorderSide(
+                          color: AppTheme.primaryColor,
+                          width: 3,
                         ),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        primary: AppTheme.errorColor,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 5,
-                    ),
-                    child: ElevatedButton(
-                      child: const Text(
-                        'Create',
-                        style: TextStyle(
-                          fontSize: 18,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppTheme.primaryColor,
+                          width: 3,
                         ),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        primary: AppTheme.primaryColor,
+                      labelText: 'Collection Name',
+                      labelStyle: TextStyle(
+                        color: AppTheme.primaryColor,
                       ),
-                      onPressed: () {},
                     ),
                   ),
-                ],
-              )
-            ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                      ),
+                      child: ElevatedButton(
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: AppTheme.errorColor,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                      ),
+                      child: ElevatedButton(
+                        child: const Text(
+                          'Create',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: AppTheme.primaryColor,
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ],

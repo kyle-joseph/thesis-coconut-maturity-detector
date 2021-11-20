@@ -8,6 +8,7 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: HomeBody(),
+        resizeToAvoidBottomInset: false,
       ),
     );
   }
