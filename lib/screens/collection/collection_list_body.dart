@@ -32,7 +32,6 @@ class _CollectionListBodyState extends State<CollectionListBody> {
 
   Widget collectionList() {
     return Container(
-      height: 85,
       margin: const EdgeInsets.only(
         bottom: 10,
       ),
@@ -94,7 +93,7 @@ class _CollectionListBodyState extends State<CollectionListBody> {
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.orangeAccent,
-                      minimumSize: const Size(80, 30),
+                      minimumSize: const Size(80, 33),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -120,7 +119,7 @@ class _CollectionListBodyState extends State<CollectionListBody> {
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: AppTheme.primaryColor,
-                      minimumSize: const Size(80, 30),
+                      minimumSize: const Size(80, 33),
                     ),
                     onPressed: () {},
                   ),

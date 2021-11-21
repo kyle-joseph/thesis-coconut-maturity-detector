@@ -48,9 +48,10 @@ class _CollectionSummaryBodyState extends State<CollectionSummaryBody> {
             ),
             width: MediaQuery.of(context).size.width,
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.5,
+              // height: MediaQuery.of(context).size.height * 0.5,
               padding: const EdgeInsets.only(
                 top: 20,
+                bottom: 15,
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -65,6 +66,7 @@ class _CollectionSummaryBodyState extends State<CollectionSummaryBody> {
                 ],
               ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(
