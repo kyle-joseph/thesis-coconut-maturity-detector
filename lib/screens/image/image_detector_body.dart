@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:coconut_maturity_detector/components/theme.dart';
+import 'package:coconut_maturity_detector/screens/prediction/prediction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -196,15 +197,15 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
       );
 
       print(prediction);
-      // await Navigator.push(
-      //   context,
-      //   CupertinoPageRoute(
-      //     builder: (context) => Prediction(
-      //       prediction: prediction,
-      //       imagePath: imagePath,
-      //     ),
-      //   ),
-      // );
+
+      await Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => PredictionScreen(
+            prediction: prediction![0]["label"],
+          ),
+        ),
+      );
       // ignore: avoid_print
     } catch (e) {
       // ignore: avoid_print
@@ -215,7 +216,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
   Future loadModel() async {
     Tflite.close();
     var res = await Tflite.loadModel(
-        model: "assets/model/coconut_image.tflite",
+        model: "assets/model/coconut_image_augmented.tflite",
         labels: "assets/model/labels.txt");
     // ignore: avoid_print
     print("Hello World: $res");
