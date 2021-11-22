@@ -139,23 +139,24 @@ class HomeBody extends StatelessWidget {
         bottom: 25,
       ),
       child: ElevatedButton.icon(
-          icon: icon,
-          label: Text(
-            label,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          style: ElevatedButton.styleFrom(
-            primary: AppTheme.primaryColor,
-            minimumSize: const Size(228, 60),
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (context) => route,
-              ),
-            );
-          }),
+        icon: icon,
+        label: Text(
+          label,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: AppTheme.primaryColor,
+          minimumSize: const Size(228, 60),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => route,
+            ),
+          );
+        },
+      ),
     );
   }
 

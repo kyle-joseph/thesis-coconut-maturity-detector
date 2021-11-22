@@ -1,5 +1,6 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
 import 'package:coconut_maturity_detector/screens/collection_single/collection_summary.dart';
+import 'package:coconut_maturity_detector/screens/detector/detector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -121,7 +122,14 @@ class _CollectionListBodyState extends State<CollectionListBody> {
                       primary: AppTheme.primaryColor,
                       minimumSize: const Size(80, 33),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => DetectorScreen(),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
