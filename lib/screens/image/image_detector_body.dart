@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:coconut_maturity_detector/components/theme.dart';
 import 'package:coconut_maturity_detector/screens/prediction/prediction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tflite/tflite.dart';
@@ -181,11 +184,21 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
   Future captureImage(BuildContext context) async {
     try {
       await _initCameraFuture;
-      // final imagePath = join(
-      //   (await getExternalStorageDirectory())!.path,
-      //   '${DateTime.now()}.jpg',
-      // );
+      final imagePath = join(
+        (await getExternalStorageDirectory())!.path,
+        '${DateTime.now()}.jpg',
+      );
       final image = await _cameraController.takePicture();
+      ImageProperties properties =
+          await FlutterNativeImage.getImageProperties(image.path);
+      var size = 224 * 2;
+      var offset_x = (properties.width! - size) / 2;
+      var offset_y = (properties.height! - size) / 2;
+
+      File croppedFile = await FlutterNativeImage.cropImage(image.path,
+          offset_x.toInt(), offset_y.toInt(), size.toInt(), size.toInt());
+
+      // croppedFile.copy(imagePath);
       // image.saveTo(imagePath);
 
       var prediction = await Tflite.runModelOnImage(
@@ -196,6 +209,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
         imageStd: 127.5,
       );
 
+      await croppedFile.delete();
       print(prediction);
 
       await Navigator.push(

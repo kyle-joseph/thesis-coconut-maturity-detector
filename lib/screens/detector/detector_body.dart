@@ -1,4 +1,5 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
+import 'package:coconut_maturity_detector/screens/image/image_detector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -78,6 +79,7 @@ class _DetectorBodyState extends State<DetectorBody> {
                             Icons.camera,
                             size: 40,
                           ),
+                          ImageDetector(),
                         ),
                       ),
                       detectorButton(
@@ -87,6 +89,7 @@ class _DetectorBodyState extends State<DetectorBody> {
                           Icons.mic,
                           size: 40,
                         ),
+                        ImageDetector(),
                       )
                     ],
                   )),
@@ -99,7 +102,8 @@ class _DetectorBodyState extends State<DetectorBody> {
     );
   }
 
-  Widget detectorButton(BuildContext context, String label, Icon icon) {
+  Widget detectorButton(
+      BuildContext context, String label, Icon icon, var route) {
     return ElevatedButton.icon(
       icon: icon,
       label: Text(
@@ -114,12 +118,12 @@ class _DetectorBodyState extends State<DetectorBody> {
         minimumSize: const Size(165, 60),
       ),
       onPressed: () {
-        // Navigator.push(
-        //   context,
-        //   CupertinoPageRoute(
-        //     builder: (context) => route,
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => route,
+          ),
+        );
       },
     );
   }

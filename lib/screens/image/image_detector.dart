@@ -2,9 +2,8 @@ import 'package:coconut_maturity_detector/components/theme.dart';
 import 'package:coconut_maturity_detector/screens/image/image_detector_body.dart';
 import 'package:flutter/material.dart';
 
+// ignore: use_key_in_widget_constructors
 class ImageDetector extends StatelessWidget {
-  const ImageDetector({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(

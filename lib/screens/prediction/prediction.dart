@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace, must_be_immutable, prefer_typing_uninitialized_variables
+
 import 'package:coconut_maturity_detector/components/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +27,6 @@ class PredictionScreen extends StatelessWidget {
         resizeToAvoidBottomInset: false,
       ),
     );
-    ;
   }
 
   Widget predictionBody(BuildContext context) {
