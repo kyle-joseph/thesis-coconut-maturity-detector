@@ -65,6 +65,7 @@ flutter:
     - assets/images/
     - assets/model/coconut_image.tflite
     - assets/model/coconut_acoustic_tm.tflite
+    - assets/model/coconut_image_augmented.tflite
     - assets/model/labels.txt
     - assets/model/labels2.txt
 

@@ -16,6 +16,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
   late CameraController _cameraController;
   late Future<void> _initCameraFuture;
   late List predictions;
+  bool _flashOn = false;
 
   @override
   void initState() {
@@ -52,7 +53,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
   }
 
   FutureBuilder homeBody(BuildContext context, CameraDescription camera) {
-    _cameraController = CameraController(camera, ResolutionPreset.ultraHigh);
+    _cameraController = CameraController(camera, ResolutionPreset.high);
     _initCameraFuture = _cameraController.initialize();
     final _screenSize = MediaQuery.of(context).size;
 
@@ -96,7 +97,6 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
                       padding: const EdgeInsets.all(10),
                       color: AppTheme.primaryColor,
                       width: MediaQuery.of(context).size.width,
-                      height: 70,
                       child: const Text(
                         'Place the coconut inside the square.',
                         style: TextStyle(
@@ -108,17 +108,59 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
                     ),
                     // ignore: avoid_unnecessary_containers
                     Container(
+                      padding: const EdgeInsets.only(
+                        bottom: 20,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          IconButton(
-                            iconSize: 65,
-                            color: Colors.white,
-                            splashColor: const Color(0xff12DF9A),
-                            icon: const Icon(Icons.camera),
-                            onPressed: () async {
-                              await captureImage(context);
-                            },
+                          Flexible(
+                            flex: 2,
+                            fit: FlexFit.tight,
+                            child: ElevatedButton(
+                              child: Icon(
+                                _flashOn ? Icons.flash_on : Icons.flash_off,
+                                size: 25,
+                                color: Colors.white,
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                shape: const CircleBorder(),
+                                padding: const EdgeInsets.all(10),
+                                primary: AppTheme.primaryColor,
+                                onPrimary: Colors.greenAccent,
+                              ),
+                              onPressed: () {
+                                setState(() => _flashOn = !_flashOn);
+                              },
+                            ),
+                          ),
+                          Flexible(
+                            flex: 3,
+                            fit: FlexFit.tight,
+                            child: ElevatedButton(
+                              child: const Icon(
+                                Icons.camera,
+                                size: 50,
+                                color: Colors.white,
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                shape: const CircleBorder(),
+                                padding: const EdgeInsets.all(10),
+                                primary: AppTheme.primaryColor,
+                                onPrimary: Colors.greenAccent,
+                              ),
+                              onPressed: () async {
+                                _cameraController.setFlashMode(_flashOn
+                                    ? FlashMode.always
+                                    : FlashMode.off);
+                                await captureImage(context);
+                              },
+                            ),
+                          ),
+                          Flexible(
+                            flex: 2,
+                            fit: FlexFit.tight,
+                            child: Container(),
                           )
                         ],
                       ),
@@ -138,12 +180,12 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
   Future captureImage(BuildContext context) async {
     try {
       await _initCameraFuture;
-      final imagePath = join(
-        (await getExternalStorageDirectory())!.path,
-        '${DateTime.now()}.jpg',
-      );
+      // final imagePath = join(
+      //   (await getExternalStorageDirectory())!.path,
+      //   '${DateTime.now()}.jpg',
+      // );
       final image = await _cameraController.takePicture();
-      image.saveTo(imagePath);
+      // image.saveTo(imagePath);
 
       var prediction = await Tflite.runModelOnImage(
         path: image.path,
@@ -164,7 +206,6 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
       //   ),
       // );
       // ignore: avoid_print
-      print(image.path);
     } catch (e) {
       // ignore: avoid_print
       print(e);
