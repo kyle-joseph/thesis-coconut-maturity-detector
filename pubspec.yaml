@@ -39,6 +39,7 @@ dependencies:
   path_provider: ^2.0.7
   path: ^1.8.0
   flutter_native_image: ^0.0.6+1
+  audio_wave: ^0.1.2
 
 dev_dependencies:
   flutter_test:

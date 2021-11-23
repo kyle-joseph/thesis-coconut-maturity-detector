@@ -1,4 +1,5 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
+import 'package:coconut_maturity_detector/screens/acoustic/acoustic.dart';
 import 'package:coconut_maturity_detector/screens/image/image_detector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,34 +66,35 @@ class _DetectorBodyState extends State<DetectorBody> {
                   fit: FlexFit.tight,
                   // ignore: avoid_unnecessary_containers
                   child: Container(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 20,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 20,
+                          ),
+                          child: detectorButton(
+                            context,
+                            'Image',
+                            const Icon(
+                              Icons.camera,
+                              size: 40,
+                            ),
+                            ImageDetector(),
+                          ),
                         ),
-                        child: detectorButton(
+                        detectorButton(
                           context,
-                          'Image',
+                          'Audio',
                           const Icon(
-                            Icons.camera,
+                            Icons.mic,
                             size: 40,
                           ),
-                          ImageDetector(),
-                        ),
-                      ),
-                      detectorButton(
-                        context,
-                        'Audio',
-                        const Icon(
-                          Icons.mic,
-                          size: 40,
-                        ),
-                        ImageDetector(),
-                      )
-                    ],
-                  )),
+                          AcousticScreen(),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, duplicate_ignore, avoid_print
+
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -182,8 +184,10 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
   }
 
   Future captureImage(BuildContext context) async {
+    // ignore: duplicate_ignore
     try {
       await _initCameraFuture;
+      // ignore: unused_local_variable
       final imagePath = join(
         (await getExternalStorageDirectory())!.path,
         '${DateTime.now()}.jpg',
@@ -192,6 +196,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
       ImageProperties properties =
           await FlutterNativeImage.getImageProperties(image.path);
       var size = 224 * 2;
+      // ignore: non_constant_identifier_names
       var offset_x = (properties.width! - size) / 2;
       var offset_y = (properties.height! - size) / 2;
 
