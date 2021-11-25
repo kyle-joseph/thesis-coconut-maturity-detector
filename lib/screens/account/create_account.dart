@@ -1,16 +1,28 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
 import 'package:flutter/material.dart';
 
+// ignore: use_key_in_widget_constructors
 class CreateAccount extends StatefulWidget {
-  const CreateAccount({Key? key}) : super(key: key);
-
   @override
   _CreateAccountState createState() => _CreateAccountState();
 }
 
 class _CreateAccountState extends State<CreateAccount> {
-  late Color _labelTextColorStore = Colors.grey;
-  late Color _labelTextColorStaff = Colors.grey;
+  late final TextEditingController _storeNameController =
+      TextEditingController();
+  late final TextEditingController _staffNameController =
+      TextEditingController();
+  // ignore: prefer_final_fields
+  bool _validatedStoreName = true;
+  // ignore: prefer_final_fields
+  bool _validatedStaffName = true;
+
+  @override
+  void dispose() {
+    _storeNameController.dispose();
+    _staffNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,14 +94,15 @@ class _CreateAccountState extends State<CreateAccount> {
                         padding: const EdgeInsets.only(
                           bottom: 20,
                         ),
-                        child: registerTextField(
-                            context, "Business/Store Name", 0),
+                        child: registerTextField(context, "Business/Store Name",
+                            _storeNameController, _validatedStoreName),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
                           bottom: 10,
                         ),
-                        child: registerTextField(context, "Staff Name", 1),
+                        child: registerTextField(context, "Staff Name",
+                            _staffNameController, _validatedStaffName),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -106,7 +119,9 @@ class _CreateAccountState extends State<CreateAccount> {
                               primary: AppTheme.primaryColor,
                               minimumSize: const Size(100, 45),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              createButtonPressed();
+                            },
                           )
                         ],
                       )
@@ -121,43 +136,42 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  Widget registerTextField(BuildContext context, String label, int fieldType) {
-    return Focus(
-      child: TextField(
-        decoration: InputDecoration(
-          fillColor: AppTheme.primaryColor,
-          border: const OutlineInputBorder(),
-          focusedBorder: const OutlineInputBorder(
-            // width: 0.0 produces a thin "hairline" border
-            borderSide: BorderSide(
-              color: AppTheme.primaryColor,
-              width: 3,
-            ),
+  void createButtonPressed() {
+    setState(() {
+      _validatedStoreName = _storeNameController.text.isEmpty ? false : true;
+      _validatedStaffName = _staffNameController.text.isEmpty ? false : true;
+    });
+  }
+
+  Widget registerTextField(
+      BuildContext context, String label, var controller, bool validator) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        fillColor: AppTheme.primaryColor,
+        border: const OutlineInputBorder(),
+        focusedBorder: const OutlineInputBorder(
+          // width: 0.0 produces a thin "hairline" border
+          borderSide: BorderSide(
+            color: AppTheme.primaryColor,
+            width: 2,
           ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.grey,
-              width: 3,
-            ),
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: AppTheme.primaryColor,
+            width: 2,
           ),
-          labelText: label,
-          labelStyle: TextStyle(
-              color:
-                  fieldType == 0 ? _labelTextColorStore : _labelTextColorStaff),
+        ),
+        labelText: label,
+        errorText: validator ? null : 'This field should not be empty',
+        errorStyle: const TextStyle(
+          color: AppTheme.errorColor,
+        ),
+        floatingLabelStyle: const TextStyle(
+          color: AppTheme.primaryColor,
         ),
       ),
-      onFocusChange: (hasFocus) {
-        if (hasFocus) {
-          if (fieldType == 0) {
-            setState(() => _labelTextColorStore = AppTheme.primaryColor);
-          } else {
-            setState(() => _labelTextColorStaff = AppTheme.primaryColor);
-          }
-        } else {
-          setState(() => _labelTextColorStore = Colors.grey);
-          setState(() => _labelTextColorStaff = Colors.grey);
-        }
-      },
     );
   }
 }

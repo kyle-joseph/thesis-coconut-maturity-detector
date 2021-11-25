@@ -1,5 +1,7 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
+import 'package:coconut_maturity_detector/screens/account/create_account.dart';
 import 'package:coconut_maturity_detector/screens/home/home.dart';
+import 'package:coconut_maturity_detector/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -7,12 +9,25 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  final appTheme = AppTheme();
+// ignore: use_key_in_widget_constructors
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
-  MyApp({Key? key}) : super(key: key);
+class _MyAppState extends State<MyApp> {
+  late Future<List> storeResult;
 
-  // This widget is the root of your application.
+  @override
+  void initState() {
+    super.initState();
+    loadAccount();
+  }
+
+  void loadAccount() async {
+    storeResult = await CocoDatabase.read(tableName: 'store');
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -32,7 +47,12 @@ class MyApp extends StatelessWidget {
           primaryColorLight: AppTheme.primaryColorLight,
           fontFamily: AppTheme.fontFamily,
         ),
-        home: HomeScreen(),
+        home: FutureBuilder(
+          future: storeResult,
+          builder: (context, snapshot) {
+            // if (snapshot.hasData && storeResult.length == 0) {}
+          },
+        ),
       ),
     );
   }
