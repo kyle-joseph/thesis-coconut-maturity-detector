@@ -163,8 +163,10 @@ class HomeBody extends StatelessWidget {
   }
 
   Widget homeStoreAndStaff(BuildContext context) {
-    final store = Provider.of<ApplicationState>(context).currentStore;
-    final staff = Provider.of<ApplicationState>(context).currentStaff;
+    final store =
+        Provider.of<ApplicationState>(context, listen: false).currentStore;
+    final staff =
+        Provider.of<ApplicationState>(context, listen: false).currentStaff;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

@@ -197,14 +197,14 @@ class _CreateAccountState extends State<CreateAccount> {
             width: 2,
           ),
         ),
-        errorBorder: OutlineInputBorder(
+        errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(
-            color: validator ? AppTheme.primaryColor : AppTheme.errorColor,
+            color: AppTheme.errorColor,
             width: 2,
           ),
         ),
         labelText: label,
-        errorText: validator ? null : 'This field should not be empty',
+        errorText: validator ? null : 'This field is required',
         errorStyle: const TextStyle(
           color: AppTheme.errorColor,
         ),
