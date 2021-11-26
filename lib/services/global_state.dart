@@ -13,6 +13,8 @@ class ApplicationState extends ChangeNotifier {
 
   Staff get currentStaff => staff;
 
+  int get currentCollectionId => collectionId;
+
   void setStoreAndStaffInfo(
       {required var storeId,
       required var storeName,

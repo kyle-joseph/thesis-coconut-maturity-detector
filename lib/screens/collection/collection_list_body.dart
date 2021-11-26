@@ -1,8 +1,11 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
 import 'package:coconut_maturity_detector/screens/collection_single/collection_summary.dart';
 import 'package:coconut_maturity_detector/screens/detector/detector.dart';
+import 'package:coconut_maturity_detector/services/database.dart';
+import 'package:coconut_maturity_detector/services/global_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore: use_key_in_widget_constructors
 class CollectionListBody extends StatefulWidget {
@@ -14,6 +17,11 @@ class CollectionListBody extends StatefulWidget {
 
 class _CollectionListBodyState extends State<CollectionListBody> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(
@@ -22,16 +30,38 @@ class _CollectionListBodyState extends State<CollectionListBody> {
         right: 12,
       ),
       width: MediaQuery.of(context).size.width,
-      child: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return collectionList();
+      child: FutureBuilder<List>(
+        future: loadCollections(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return collectionList(snapshot.data![index]);
+              },
+            );
+          }
+          return const Center(
+            child: Text(
+              'No collections created.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: AppTheme.primaryColor,
+                fontSize: 25,
+              ),
+            ),
+          );
         },
       ),
     );
   }
 
-  Widget collectionList() {
+  Future<List> loadCollections() async {
+    var result = await CocoDatabase.read(tableName: 'collection');
+    return await result;
+  }
+
+  Widget collectionList(var data) {
     return Container(
       margin: const EdgeInsets.only(
         bottom: 10,
@@ -58,18 +88,18 @@ class _CollectionListBodyState extends State<CollectionListBody> {
           Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
-                  'Collection 1',
-                  style: TextStyle(
-                    fontSize: 18,
+                  data.collectionName ?? '',
+                  style: const TextStyle(
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
-                  'Created: 2021-11-20',
-                  style: TextStyle(
-                    fontSize: 15,
+                  'Created: ${data.createdAt.split('T')[0] ?? ''}',
+                  style: const TextStyle(
+                    fontSize: 13,
                   ),
                 ),
               ],
@@ -88,15 +118,17 @@ class _CollectionListBodyState extends State<CollectionListBody> {
                     child: const Text(
                       'Summary',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.orangeAccent,
-                      minimumSize: const Size(80, 33),
+                      minimumSize: const Size(80, 30),
                     ),
                     onPressed: () {
+                      Provider.of<ApplicationState>(context, listen: false)
+                          .setCollectionId(data.collectionId);
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
@@ -114,15 +146,17 @@ class _CollectionListBodyState extends State<CollectionListBody> {
                     child: const Text(
                       'Detect',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: AppTheme.primaryColor,
-                      minimumSize: const Size(80, 33),
+                      minimumSize: const Size(80, 30),
                     ),
                     onPressed: () {
+                      Provider.of<ApplicationState>(context, listen: false)
+                          .setCollectionId(data.collectionId);
                       Navigator.push(
                         context,
                         CupertinoPageRoute(

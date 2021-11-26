@@ -178,15 +178,29 @@ class _CreateCollectionState extends State<CreateCollection> {
           Provider.of<ApplicationState>(context, listen: false).currentStore;
       final staff =
           Provider.of<ApplicationState>(context, listen: false).currentStaff;
+
       var newCollection = Collection(
           collectionName: _collectionController.text,
           storeId: store.storeId,
           staffId: staff.staffId,
           createdAt: DateTime.now().toIso8601String());
-      var result = await CocoDatabase.insert(
+
+      var collectionResult = await CocoDatabase.insert(
           className: newCollection, tableName: 'collection');
 
-      if (await result > 0) {
+      var latestCollection = await CocoDatabase.read(tableName: 'collection');
+      int collectionIndex = await latestCollection.length - 1;
+
+      var newSummary = Summary(
+          collectionId: await latestCollection[collectionIndex].collectionId,
+          prematureCount: 0,
+          matureCount: 0,
+          overmatureCount: 0);
+
+      var summaryResult = await CocoDatabase.insert(
+          className: newSummary, tableName: 'summary');
+
+      if (await collectionResult > 0 && await summaryResult > 0) {
         Toast.show("Collection created successfully", context,
             duration: 3, gravity: Toast.BOTTOM);
         Navigator.pop(context);

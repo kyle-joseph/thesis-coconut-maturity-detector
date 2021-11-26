@@ -109,8 +109,8 @@ class CocoDatabase {
             result.length,
             (i) {
               return Collection(
-                collectionId: result[i]['staffId'],
-                collectionName: result[i]['staffName'],
+                collectionId: result[i]['collectionId'],
+                collectionName: result[i]['collectionName'],
                 createdAt: result[i]['createdAt'],
                 storeId: result[i]['storeId'],
                 staffId: result[i]['staffId'],
