@@ -44,6 +44,7 @@ class CocoDatabase {
   }) async {
     final db = await openDb();
 
+    // ignore: prefer_typing_uninitialized_variables
     var result;
     if (columns == null && arguments == null && whereClause == '') {
       result = await db.query(tableName);
@@ -139,12 +140,13 @@ class CocoDatabase {
   static Future insert(
       {required var className, required String tableName}) async {
     final db = await openDb();
-    await db.insert(
+    var result = await db.insert(
       tableName,
       className.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    await db.close();
+
+    return await result;
   }
 
   // Unified update function for all tables
@@ -161,7 +163,6 @@ class CocoDatabase {
       where: whereClause,
       whereArgs: arguments,
     );
-    await db.close();
   }
 
   static Future delete(
@@ -175,6 +176,5 @@ class CocoDatabase {
       where: whereClause,
       whereArgs: arguments,
     );
-    await db.close();
   }
 }

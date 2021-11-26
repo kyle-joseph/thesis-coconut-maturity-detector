@@ -1,4 +1,8 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
+import 'package:coconut_maturity_detector/screens/home/home.dart';
+import 'package:coconut_maturity_detector/services/database.dart';
+import 'package:coconut_maturity_detector/services/schemas.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // ignore: use_key_in_widget_constructors
@@ -136,11 +140,26 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  void createButtonPressed() {
+  void createButtonPressed() async {
     setState(() {
       _validatedStoreName = _storeNameController.text.isEmpty ? false : true;
       _validatedStaffName = _staffNameController.text.isEmpty ? false : true;
     });
+
+    if (_validatedStoreName && _validatedStaffName) {
+      var newStore = Store(storeName: _storeNameController.text);
+      var newStaff = Staff(staffName: _staffNameController.text);
+      var storeResult =
+          await CocoDatabase.insert(className: newStore, tableName: 'store');
+      var staffResult =
+          await CocoDatabase.insert(className: newStaff, tableName: 'staff');
+
+      if (await storeResult > 0 && await staffResult > 0) {
+        Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute(builder: (context) => HomeScreen()),
+            (route) => false);
+      }
+    }
   }
 
   Widget registerTextField(
@@ -151,7 +170,6 @@ class _CreateAccountState extends State<CreateAccount> {
         fillColor: AppTheme.primaryColor,
         border: const OutlineInputBorder(),
         focusedBorder: const OutlineInputBorder(
-          // width: 0.0 produces a thin "hairline" border
           borderSide: BorderSide(
             color: AppTheme.primaryColor,
             width: 2,
@@ -160,6 +178,12 @@ class _CreateAccountState extends State<CreateAccount> {
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
             color: AppTheme.primaryColor,
+            width: 2,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: validator ? AppTheme.primaryColor : AppTheme.errorColor,
             width: 2,
           ),
         ),

@@ -16,16 +16,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Future<List> storeResult;
-
   @override
   void initState() {
     super.initState();
     loadAccount();
   }
 
-  void loadAccount() async {
-    storeResult = await CocoDatabase.read(tableName: 'store');
+  Future<List> loadAccount() async {
+    var storeResult = await CocoDatabase.read(tableName: 'store');
+    return storeResult;
   }
 
   @override
@@ -47,10 +46,17 @@ class _MyAppState extends State<MyApp> {
           primaryColorLight: AppTheme.primaryColorLight,
           fontFamily: AppTheme.fontFamily,
         ),
-        home: FutureBuilder(
-          future: storeResult,
+        home: FutureBuilder<List>(
+          future: loadAccount(),
           builder: (context, snapshot) {
-            // if (snapshot.hasData && storeResult.length == 0) {}
+            if (snapshot.hasData) {
+              if (snapshot.data!.isEmpty) {
+                return CreateAccount();
+              } else {
+                return HomeScreen();
+              }
+            }
+            return Container();
           },
         ),
       ),
