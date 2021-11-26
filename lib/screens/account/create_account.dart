@@ -1,9 +1,11 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
 import 'package:coconut_maturity_detector/screens/home/home.dart';
 import 'package:coconut_maturity_detector/services/database.dart';
+import 'package:coconut_maturity_detector/services/global_state.dart';
 import 'package:coconut_maturity_detector/services/schemas.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore: use_key_in_widget_constructors
 class CreateAccount extends StatefulWidget {
@@ -140,6 +142,12 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
+  Future<List> loadAccount() async {
+    var storeResult = await CocoDatabase.read(tableName: 'store');
+    var staffResult = await CocoDatabase.read(tableName: 'staff');
+    return [await storeResult, await staffResult];
+  }
+
   void createButtonPressed() async {
     setState(() {
       _validatedStoreName = _storeNameController.text.isEmpty ? false : true;
@@ -155,7 +163,15 @@ class _CreateAccountState extends State<CreateAccount> {
           await CocoDatabase.insert(className: newStaff, tableName: 'staff');
 
       if (await storeResult > 0 && await staffResult > 0) {
-        Navigator.of(context).pushAndRemoveUntil(
+        var data = await loadAccount();
+        Provider.of<ApplicationState>(context, listen: false)
+            .setStoreAndStaffInfo(
+                storeId: await data[0][0].storeId,
+                storeName: await data[0][0].storeName,
+                staffId: await data[1][0].staffId,
+                staffName: await data[1][0].staffName);
+
+        await Navigator.of(context).pushAndRemoveUntil(
             CupertinoPageRoute(builder: (context) => HomeScreen()),
             (route) => false);
       }

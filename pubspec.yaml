@@ -41,6 +41,7 @@ dependencies:
   flutter_native_image: ^0.0.6+1
   audio_wave: ^0.1.2
   sqflite: ^2.0.0+4
+  provider: ^6.0.1
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,10 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
 import 'package:coconut_maturity_detector/screens/collection/collection_list.dart';
 import 'package:coconut_maturity_detector/screens/collection/create_collection.dart';
+import 'package:coconut_maturity_detector/services/global_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class HomeBody extends StatelessWidget {
@@ -161,6 +163,8 @@ class HomeBody extends StatelessWidget {
   }
 
   Widget homeStoreAndStaff(BuildContext context) {
+    final store = Provider.of<ApplicationState>(context).currentStore;
+    final staff = Provider.of<ApplicationState>(context).currentStaff;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -170,10 +174,10 @@ class HomeBody extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const Text(
-                "John Doe Buko",
+              Text(
+                store.storeName,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppTheme.primaryColor,
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -203,9 +207,10 @@ class HomeBody extends StatelessWidget {
         Container(
           child: Column(
             children: [
-              const Text(
-                "Maria Doe",
-                style: TextStyle(
+              Text(
+                staff.staffName,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
                   color: AppTheme.primaryColor,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
