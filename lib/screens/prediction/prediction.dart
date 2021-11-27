@@ -1,7 +1,11 @@
-// ignore_for_file: sized_box_for_whitespace, must_be_immutable, prefer_typing_uninitialized_variables
+// ignore_for_file: sized_box_for_whitespace, must_be_immutable, prefer_typing_uninitialized_variables, import_of_legacy_library_into_null_safe
 
 import 'package:coconut_maturity_detector/components/theme.dart';
+import 'package:coconut_maturity_detector/services/database.dart';
+import 'package:coconut_maturity_detector/services/global_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class PredictionScreen extends StatelessWidget {
   var prediction;
@@ -58,6 +62,14 @@ class PredictionScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.17,
             ),
           ),
+          Positioned(
+            right: -40,
+            bottom: 0,
+            child: Image.asset(
+              'assets/images/coconut_tree.png',
+              height: MediaQuery.of(context).size.height * 0.40,
+            ),
+          ),
           Container(
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.only(
@@ -68,29 +80,139 @@ class PredictionScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  'Prediction',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.13,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryColor,
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                    bottom: 35,
+                  ),
+                  child: Text(
+                    'Prediction',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.13,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.primaryColor,
+                    ),
                   ),
                 ),
-                Text(
-                  prediction,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.11,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryColorLight,
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 35,
+                  ),
+                  child: Text(
+                    prediction,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.11,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.primaryColorLight,
+                    ),
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
+                      child: ElevatedButton(
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: AppTheme.errorColor,
+                          minimumSize: const Size(90, 40),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
+                      child: ElevatedButton(
+                        child: const Text(
+                          'Save',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: AppTheme.primaryColor,
+                          minimumSize: const Size(90, 40),
+                        ),
+                        onPressed: () {
+                          saveButtonPressed(context);
+                        },
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           )
         ],
       ),
     );
+  }
+
+  void saveButtonPressed(BuildContext context) async {
+    final collectionId = Provider.of<ApplicationState>(context, listen: false)
+        .currentCollectionId;
+
+    String toUpdate = '';
+    switch (prediction) {
+      case 'Background':
+        Toast.show(
+          "Cannot save 'Background' prediction",
+          context,
+          duration: 3,
+          gravity: Toast.BOTTOM,
+          backgroundColor: AppTheme.errorColor,
+        );
+        break;
+      case 'Premature':
+        toUpdate = 'prematureCount';
+        break;
+      case 'Mature':
+        toUpdate = 'matureCount';
+        break;
+      case 'OverMature':
+        toUpdate = 'overmatureCount';
+        break;
+    }
+
+    String sql =
+        "UPDATE summary SET $toUpdate = $toUpdate + 1 WHERE collectionId = ?";
+    List arguments = [collectionId];
+
+    var result = await CocoDatabase.update(sql: sql, arguments: arguments);
+
+    if (await result > 0) {
+      Toast.show(
+        "Prediction saved successfully",
+        context,
+        duration: 3,
+        gravity: Toast.BOTTOM,
+      );
+      Navigator.pop(context);
+    } else {
+      Toast.show(
+        "Prediction saving was unsuccessful",
+        context,
+        duration: 3,
+        gravity: Toast.BOTTOM,
+        backgroundColor: AppTheme.errorColor,
+      );
+      Navigator.pop(context);
+    }
   }
 }

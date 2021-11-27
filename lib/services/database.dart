@@ -79,60 +79,52 @@ class CocoDatabase {
   static Future getClassMap(String tableName, var result) async {
     switch (tableName) {
       case 'store':
-        {
-          return List.generate(
-            result.length,
-            (i) {
-              return Store(
-                storeId: result[i]['storeId'],
-                storeName: result[i]['storeName'],
-              );
-            },
-          );
-        }
+        return List.generate(
+          result.length,
+          (i) {
+            return Store(
+              storeId: result[i]['storeId'],
+              storeName: result[i]['storeName'],
+            );
+          },
+        );
 
       case 'staff':
-        {
-          return List.generate(
-            result.length,
-            (i) {
-              return Staff(
-                staffId: result[i]['staffId'],
-                staffName: result[i]['staffName'],
-              );
-            },
-          );
-        }
+        return List.generate(
+          result.length,
+          (i) {
+            return Staff(
+              staffId: result[i]['staffId'],
+              staffName: result[i]['staffName'],
+            );
+          },
+        );
       case 'collection':
-        {
-          return List.generate(
-            result.length,
-            (i) {
-              return Collection(
-                collectionId: result[i]['collectionId'],
-                collectionName: result[i]['collectionName'],
-                createdAt: result[i]['createdAt'],
-                storeId: result[i]['storeId'],
-                staffId: result[i]['staffId'],
-              );
-            },
-          );
-        }
+        return List.generate(
+          result.length,
+          (i) {
+            return Collection(
+              collectionId: result[i]['collectionId'],
+              collectionName: result[i]['collectionName'],
+              createdAt: result[i]['createdAt'],
+              storeId: result[i]['storeId'],
+              staffId: result[i]['staffId'],
+            );
+          },
+        );
       case 'summary':
-        {
-          return List.generate(
-            result.length,
-            (i) {
-              return Summary(
-                id: result[i]['id'],
-                collectionId: result[i]['collectionId'],
-                prematureCount: result[i]['prematureCount'],
-                matureCount: result[i]['matureCount'],
-                overmatureCount: result[i]['overmatureCount'],
-              );
-            },
-          );
-        }
+        return List.generate(
+          result.length,
+          (i) {
+            return Summary(
+              id: result[i]['id'],
+              collectionId: result[i]['collectionId'],
+              prematureCount: result[i]['prematureCount'],
+              matureCount: result[i]['matureCount'],
+              overmatureCount: result[i]['overmatureCount'],
+            );
+          },
+        );
     }
   }
 
@@ -150,19 +142,11 @@ class CocoDatabase {
   }
 
   // Unified update function for all tables
-  static Future update(
-      {required var className,
-      required String tableName,
-      required String whereClause,
-      required var arguments}) async {
+  static Future update({required String sql, required List arguments}) async {
     final db = await openDb();
+    var result = await db.rawUpdate(sql, arguments);
 
-    await db.update(
-      tableName,
-      className.toMap(),
-      where: whereClause,
-      whereArgs: arguments,
-    );
+    return await result;
   }
 
   static Future delete(
