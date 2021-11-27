@@ -129,6 +129,8 @@ class _CollectionListBodyState extends State<CollectionListBody> {
                     onPressed: () {
                       Provider.of<ApplicationState>(context, listen: false)
                           .setCollectionId(data.collectionId);
+                      Provider.of<ApplicationState>(context, listen: false)
+                          .setCollectionName(data.collectionName);
                       Navigator.push(
                         context,
                         CupertinoPageRoute(

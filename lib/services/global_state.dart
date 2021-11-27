@@ -9,11 +9,15 @@ class ApplicationState extends ChangeNotifier {
 
   late int collectionId;
 
+  late String collectionName;
+
   Store get currentStore => store;
 
   Staff get currentStaff => staff;
 
   int get currentCollectionId => collectionId;
+
+  String get currentCollectionName => collectionName;
 
   void setStoreAndStaffInfo(
       {required var storeId,
@@ -26,5 +30,9 @@ class ApplicationState extends ChangeNotifier {
 
   void setCollectionId(int id) {
     collectionId = id;
+  }
+
+  void setCollectionName(String colName) {
+    collectionName = colName;
   }
 }

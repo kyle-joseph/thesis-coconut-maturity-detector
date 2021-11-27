@@ -1,6 +1,9 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
+import 'package:coconut_maturity_detector/services/database.dart';
+import 'package:coconut_maturity_detector/services/global_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:provider/provider.dart';
 
 // ignore: use_key_in_widget_constructors
 class CollectionSummaryBody extends StatefulWidget {
@@ -11,6 +14,11 @@ class CollectionSummaryBody extends StatefulWidget {
 class _CollectionSummaryBodyState extends State<CollectionSummaryBody> {
   @override
   Widget build(BuildContext context) {
+    final collectionId = Provider.of<ApplicationState>(context, listen: false)
+        .currentCollectionId;
+    final collectionName = Provider.of<ApplicationState>(context, listen: false)
+        .currentCollectionName;
+
     // ignore: sized_box_for_whitespace
     return Container(
       height: MediaQuery.of(context).size.height,
@@ -48,50 +56,71 @@ class _CollectionSummaryBodyState extends State<CollectionSummaryBody> {
             ),
             width: MediaQuery.of(context).size.width,
             child: Container(
-              // height: MediaQuery.of(context).size.height * 0.5,
-              padding: const EdgeInsets.only(
-                top: 20,
-                bottom: 15,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 3,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      bottom: 25,
+                // height: MediaQuery.of(context).size.height * 0.5,
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  bottom: 15,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                      offset: const Offset(0, 2),
                     ),
-                    child: Text(
-                      'Collection 1',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
+                  ],
+                ),
+                child: FutureBuilder<List>(
+                  future: loadSummary(collectionId),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var data = snapshot.data;
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 25,
+                            ),
+                            child: Text(
+                              collectionName,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: AppTheme.primaryColor,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          summaryCard('Premature', '(Malauhog)',
+                              data![0].prematureCount ?? 0),
+                          summaryCard('Mature', '(Malakanin)',
+                              data[0].matureCount ?? 0),
+                          summaryCard('Overmature', '(Malakatad)',
+                              data[0].overmatureCount ?? 0),
+                        ],
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(
                         color: AppTheme.primaryColor,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                  ),
-                  summaryCard('Premature', '(Malauhog)', 100),
-                  summaryCard('Mature', '(Malakanin)', 200),
-                  summaryCard('Overmature', '(Malakatad)', 150),
-                ],
-              ),
-            ),
+                    );
+                  },
+                )),
           ),
         ],
       ),
     );
+  }
+
+  Future<List> loadSummary(var id) async {
+    var result = await CocoDatabase.read(
+        tableName: 'summary', whereClause: 'collectionId = ?', arguments: [id]);
+    return await result;
   }
 
   Widget summaryCard(String label, String altLabel, int count) {
