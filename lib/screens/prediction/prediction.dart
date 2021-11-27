@@ -185,7 +185,7 @@ class PredictionScreen extends StatelessWidget {
       case 'Mature':
         toUpdate = 'matureCount';
         break;
-      case 'OverMature':
+      case 'Overmature':
         toUpdate = 'overmatureCount';
         break;
     }
