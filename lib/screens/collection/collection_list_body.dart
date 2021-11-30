@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:coconut_maturity_detector/components/theme.dart';
 import 'package:coconut_maturity_detector/screens/collection_single/collection_summary.dart';
 import 'package:coconut_maturity_detector/screens/detector/detector.dart';
@@ -6,6 +8,7 @@ import 'package:coconut_maturity_detector/services/global_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 // ignore: use_key_in_widget_constructors
 class CollectionListBody extends StatefulWidget {
@@ -16,9 +19,13 @@ class CollectionListBody extends StatefulWidget {
 }
 
 class _CollectionListBodyState extends State<CollectionListBody> {
+  Future? collections;
+  bool deleteCollection = false;
+
   @override
   void initState() {
     super.initState();
+    loadCollections();
   }
 
   @override
@@ -30,14 +37,16 @@ class _CollectionListBodyState extends State<CollectionListBody> {
         right: 12,
       ),
       width: MediaQuery.of(context).size.width,
-      child: FutureBuilder<List>(
-        future: loadCollections(),
+      child: FutureBuilder<dynamic>(
+        future: collections,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            var data = snapshot.data;
+            data = data.reversed.toList();
             return ListView.builder(
-              itemCount: snapshot.data!.length,
+              itemCount: data!.length,
               itemBuilder: (context, index) {
-                return collectionList(snapshot.data![index]);
+                return collectionList(data![index]);
               },
             );
           }
@@ -56,9 +65,62 @@ class _CollectionListBodyState extends State<CollectionListBody> {
     );
   }
 
-  Future<List> loadCollections() async {
-    var result = await CocoDatabase.read(tableName: 'collection');
-    return await result;
+  void loadCollections() {
+    var result = CocoDatabase.read(tableName: 'collection');
+    setState(() {
+      collections = result;
+    });
+  }
+
+  void collectionDeleteById(BuildContext context, var id) async {
+    await showDeleteDialog(context);
+    if (deleteCollection) {
+      var collectionDelete = await CocoDatabase.delete(
+          tableName: 'collection',
+          whereClause: 'collectionId = ?',
+          arguments: [id]);
+      var summaryDelete = await CocoDatabase.delete(
+          tableName: 'summary',
+          whereClause: 'collectionId = ?',
+          arguments: [id]);
+
+      if (await collectionDelete > 0 && await summaryDelete > 0) {
+        loadCollections();
+        deleteCollection = false;
+        Toast.show(
+          "Collection deleted successfully",
+          context,
+          duration: 3,
+          gravity: Toast.BOTTOM,
+        );
+      }
+    }
+  }
+
+  Future<void> showDeleteDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Collection Delete'),
+        content: const Text('Do you want to delete collection?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              deleteCollection = false;
+              Navigator.pop(context, 'No');
+            },
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () {
+              deleteCollection = true;
+              Navigator.pop(context, 'Yes');
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget collectionList(var data) {
@@ -86,13 +148,16 @@ class _CollectionListBodyState extends State<CollectionListBody> {
         children: [
           // ignore: avoid_unnecessary_containers
           Container(
+            margin: const EdgeInsets.only(
+              bottom: 7,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   data.collectionName ?? '',
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 17,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -106,70 +171,86 @@ class _CollectionListBodyState extends State<CollectionListBody> {
             ),
           ),
           // ignore: avoid_unnecessary_containers
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 5,
-                  ),
-                  child: ElevatedButton(
-                    child: const Text(
-                      'Summary',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // ignore: avoid_unnecessary_containers
+              Container(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                      ),
+                      child: ElevatedButton(
+                        child: const Text(
+                          'Summary',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.orangeAccent,
+                          minimumSize: const Size(80, 30),
+                        ),
+                        onPressed: () {
+                          Provider.of<ApplicationState>(context, listen: false)
+                              .setCollectionId(data.collectionId);
+                          Provider.of<ApplicationState>(context, listen: false)
+                              .setCollectionName(data.collectionName);
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) =>
+                                  const CollectionSummaryScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.orangeAccent,
-                      minimumSize: const Size(80, 30),
-                    ),
-                    onPressed: () {
-                      Provider.of<ApplicationState>(context, listen: false)
-                          .setCollectionId(data.collectionId);
-                      Provider.of<ApplicationState>(context, listen: false)
-                          .setCollectionName(data.collectionName);
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => const CollectionSummaryScreen(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                      ),
+                      child: ElevatedButton(
+                        child: const Text(
+                          'Detect',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 5,
-                  ),
-                  child: ElevatedButton(
-                    child: const Text(
-                      'Detect',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+                        style: ElevatedButton.styleFrom(
+                          primary: AppTheme.primaryColor,
+                          minimumSize: const Size(80, 30),
+                        ),
+                        onPressed: () {
+                          Provider.of<ApplicationState>(context, listen: false)
+                              .setCollectionId(data.collectionId);
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => DetectorScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      primary: AppTheme.primaryColor,
-                      minimumSize: const Size(80, 30),
-                    ),
-                    onPressed: () {
-                      Provider.of<ApplicationState>(context, listen: false)
-                          .setCollectionId(data.collectionId);
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => DetectorScreen(),
-                        ),
-                      );
-                    },
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.delete,
+                  color: AppTheme.errorColor,
+                  size: 30,
+                ),
+                onPressed: () {
+                  collectionDeleteById(context, data.collectionId);
+                },
+              ),
+            ],
           )
         ],
       ),

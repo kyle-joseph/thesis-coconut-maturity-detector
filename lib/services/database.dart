@@ -155,10 +155,12 @@ class CocoDatabase {
       required var arguments}) async {
     final db = await openDb();
 
-    await db.delete(
+    var result = await db.delete(
       tableName,
       where: whereClause,
       whereArgs: arguments,
     );
+
+    return await result;
   }
 }
