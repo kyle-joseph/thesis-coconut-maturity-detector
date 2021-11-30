@@ -170,15 +170,15 @@ class PredictionScreen extends StatelessWidget {
 
     String toUpdate = '';
     switch (prediction) {
-      case 'Background':
-        Toast.show(
-          "Cannot save 'Background' prediction",
-          context,
-          duration: 3,
-          gravity: Toast.BOTTOM,
-          backgroundColor: AppTheme.errorColor,
-        );
-        break;
+      // case 'Background':
+      //   Toast.show(
+      //     "Cannot save 'Background' prediction",
+      //     context,
+      //     duration: 3,
+      //     gravity: Toast.BOTTOM,
+      //     backgroundColor: AppTheme.errorColor,
+      //   );
+      //   break;
       case 'Premature':
         toUpdate = 'prematureCount';
         break;
