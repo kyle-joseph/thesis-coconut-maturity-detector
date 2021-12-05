@@ -95,11 +95,18 @@ class _AcousticBodyState extends State<AcousticBody> {
 
         result = TfliteAudio.startAudioRecognition(
           inputType: 'rawAudio',
-          sampleRate: 48000,
-          recordingLength: 144000,
-          bufferSize: 24000,
-          numOfInferences: 1,
+          sampleRate: 44100,
+          recordingLength: 44032,
+          bufferSize: 22050,
+          numOfInferences: 3,
         );
+        // result = TfliteAudio.startAudioRecognition(
+        //   inputType: 'rawAudio',
+        //   sampleRate: 48000,
+        //   recordingLength: 144000,
+        //   bufferSize: 24000,
+        //   numOfInferences: 1,
+        // );
         result.listen((event) {
           recognition = event["recognitionResult"];
         }).onDone(() {
@@ -123,8 +130,8 @@ class _AcousticBodyState extends State<AcousticBody> {
 
   void loadModel() {
     TfliteAudio.loadModel(
-      model: 'assets/model/coconut_acoustic_v2.tflite',
-      label: 'assets/model/labels.txt',
+      model: 'assets/model/coconut_acoustic_tm.tflite',
+      label: 'assets/model/labels3.txt',
       numThreads: 1,
       isAsset: true,
     );

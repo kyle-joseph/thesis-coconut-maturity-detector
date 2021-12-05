@@ -75,6 +75,7 @@ flutter:
     - assets/model/coconut_image_augmented.tflite
     - assets/model/labels.txt
     - assets/model/labels2.txt
+    - assets/model/labels3.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

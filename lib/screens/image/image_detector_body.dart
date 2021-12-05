@@ -59,7 +59,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
   }
 
   FutureBuilder homeBody(BuildContext context, CameraDescription camera) {
-    _cameraController = CameraController(camera, ResolutionPreset.high);
+    _cameraController = CameraController(camera, ResolutionPreset.ultraHigh);
     _initCameraFuture = _cameraController.initialize();
     final _screenSize = MediaQuery.of(context).size;
 
@@ -195,7 +195,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
       final image = await _cameraController.takePicture();
       ImageProperties properties =
           await FlutterNativeImage.getImageProperties(image.path);
-      var size = 224 * 2;
+      var size = 224 * 3;
       // ignore: non_constant_identifier_names
       var offset_x = (properties.width! - size) / 2;
       var offset_y = (properties.height! - size) / 2;
@@ -203,11 +203,11 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
       File croppedFile = await FlutterNativeImage.cropImage(image.path,
           offset_x.toInt(), offset_y.toInt(), size.toInt(), size.toInt());
 
-      // croppedFile.copy(imagePath);
+      croppedFile.copy(imagePath);
       // image.saveTo(imagePath);
 
       var prediction = await Tflite.runModelOnImage(
-        path: image.path,
+        path: croppedFile.path,
         numResults: 3,
         threshold: 0.4,
         imageMean: 127.5,
