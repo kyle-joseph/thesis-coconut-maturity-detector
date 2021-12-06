@@ -114,7 +114,7 @@ class _AcousticBodyState extends State<AcousticBody> {
           _sound = recognition;
           // ignore: avoid_print
           print(recognition);
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             CupertinoPageRoute(
               builder: (context) => PredictionScreen(prediction: _sound),

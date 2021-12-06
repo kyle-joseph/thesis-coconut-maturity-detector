@@ -70,6 +70,8 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
           return const Center(child: Text('Camera error'));
         } else if (snapshot.connectionState == ConnectionState.done) {
           // If the Future is complete, display the preview.
+          _cameraController
+              .setFlashMode(_flashOn ? FlashMode.always : FlashMode.off);
           return Stack(
             children: [
               // ignore: avoid_unnecessary_containers
@@ -156,9 +158,6 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
                                 onPrimary: Colors.greenAccent,
                               ),
                               onPressed: () async {
-                                _cameraController.setFlashMode(_flashOn
-                                    ? FlashMode.always
-                                    : FlashMode.off);
                                 await captureImage(context);
                               },
                             ),
@@ -195,7 +194,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
       final image = await _cameraController.takePicture();
       ImageProperties properties =
           await FlutterNativeImage.getImageProperties(image.path);
-      var size = 224 * 3;
+      var size = 224 * 3.5;
       // ignore: non_constant_identifier_names
       var offset_x = (properties.width! - size) / 2;
       var offset_y = (properties.height! - size) / 2;
@@ -209,7 +208,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
       var prediction = await Tflite.runModelOnImage(
         path: croppedFile.path,
         numResults: 3,
-        threshold: 0.4,
+        threshold: 0.05,
         imageMean: 127.5,
         imageStd: 127.5,
       );
@@ -217,7 +216,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
       await croppedFile.delete();
       print(prediction);
 
-      await Navigator.push(
+      await Navigator.pushReplacement(
         context,
         CupertinoPageRoute(
           builder: (context) => PredictionScreen(

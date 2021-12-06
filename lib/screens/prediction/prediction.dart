@@ -170,7 +170,7 @@ class PredictionScreen extends StatelessWidget {
 
     String toUpdate = '';
     switch (prediction) {
-      case 'Background':
+      case 'Background Noise':
         Toast.show(
           "Cannot save 'Background' prediction",
           context,
