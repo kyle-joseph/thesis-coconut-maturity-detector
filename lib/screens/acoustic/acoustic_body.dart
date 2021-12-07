@@ -88,13 +88,12 @@ class _AcousticBodyState extends State<AcousticBody> {
   }
 
   void _recorder() async {
-    String recognition = "";
+    var recognition;
     try {
       if (!_recording) {
         setState(() => _recording = true);
 
         result = TfliteAudio.startAudioRecognition(
-          inputType: 'rawAudio',
           sampleRate: 44100,
           recordingLength: 44032,
           bufferSize: 22050,
@@ -132,6 +131,8 @@ class _AcousticBodyState extends State<AcousticBody> {
     TfliteAudio.loadModel(
       model: 'assets/model/coconut_acoustic_tm.tflite',
       label: 'assets/model/labels3.txt',
+      inputType: 'rawAudio',
+      outputRawScores: true,
       numThreads: 1,
       isAsset: true,
     );
