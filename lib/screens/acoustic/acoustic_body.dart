@@ -88,7 +88,11 @@ class _AcousticBodyState extends State<AcousticBody> {
   }
 
   void _recorder() async {
-    var recognition;
+    List finalResults = [];
+    List recognitionResults = [];
+    var recognition = '';
+    double max = 0.0;
+    int idx = 0;
     try {
       if (!_recording) {
         setState(() => _recording = true);
@@ -108,18 +112,46 @@ class _AcousticBodyState extends State<AcousticBody> {
         // );
         result.listen((event) {
           recognition = event["recognitionResult"];
-        }).onDone(() {
-          setState(() => {_recording = false});
-          _sound = recognition;
-          // ignore: avoid_print
-          print(recognition);
-          Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => PredictionScreen(prediction: _sound),
-            ),
-          );
-        });
+        }).onDone(
+          () {
+            List labels = [
+              'Background Noise',
+              'Mature',
+              'Overmature',
+              'Premature'
+            ];
+            setState(() => {_recording = false});
+            recognition = recognition.replaceAll('[', '');
+            recognition = recognition.replaceAll(']', '');
+            recognitionResults = recognition.split(',');
+
+            for (int x = 0; x < recognitionResults.length; x++) {
+              finalResults.add(double.parse(recognitionResults[x]));
+            }
+            for (int x = 0; x < finalResults.length; x++) {
+              if (finalResults[x] > max) {
+                max = finalResults[x];
+                idx = x;
+              }
+            }
+            _sound = labels[idx];
+
+            print(max);
+            // _sound = recognition;
+
+            // ignore: avoid_print
+            print(finalResults);
+            Navigator.pushReplacement(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => PredictionScreen(
+                  prediction: _sound,
+                  percentage: (max * 100).toStringAsFixed(2),
+                ),
+              ),
+            );
+          },
+        );
       }
     } catch (e) {
       // ignore: avoid_print

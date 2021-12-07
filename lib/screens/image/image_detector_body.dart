@@ -221,6 +221,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
         CupertinoPageRoute(
           builder: (context) => PredictionScreen(
             prediction: prediction![0]["label"],
+            percentage: (prediction[0]["confidence"] * 100).toStringAsFixed(2),
           ),
         ),
       );

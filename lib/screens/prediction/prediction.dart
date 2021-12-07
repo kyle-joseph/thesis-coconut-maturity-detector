@@ -9,8 +9,9 @@ import 'package:toast/toast.dart';
 
 class PredictionScreen extends StatelessWidget {
   var prediction;
+  var percentage;
   // ignore: use_key_in_widget_constructors
-  PredictionScreen({required this.prediction});
+  PredictionScreen({required this.prediction, required this.percentage});
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +105,20 @@ class PredictionScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: MediaQuery.of(context).size.width * 0.11,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.primaryColorLight,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 35,
+                  ),
+                  child: Text(
+                    '$percentage%',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.09,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.primaryColorLight,
                     ),
