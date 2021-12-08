@@ -11,6 +11,10 @@ class ApplicationState extends ChangeNotifier {
 
   late String collectionName;
 
+  List hybridLabels = [];
+
+  List hybridScores = [];
+
   Store get currentStore => store;
 
   Staff get currentStaff => staff;
@@ -18,6 +22,10 @@ class ApplicationState extends ChangeNotifier {
   int get currentCollectionId => collectionId;
 
   String get currentCollectionName => collectionName;
+
+  List get currentHybridLabels => hybridLabels;
+
+  List get currentHybridScores => hybridScores;
 
   void setStoreAndStaffInfo(
       {required var storeId,
@@ -34,5 +42,23 @@ class ApplicationState extends ChangeNotifier {
 
   void setCollectionName(String colName) {
     collectionName = colName;
+  }
+
+  void setHybridLabels(String label) {
+    hybridLabels.add(label);
+  }
+
+  void setHybridScores(double score) {
+    hybridScores.add(score);
+  }
+
+  void clearHybridLabelsAndScores() {
+    hybridLabels.clear();
+    hybridScores.clear();
+  }
+
+  void removeAcousticLabelAndScore() {
+    hybridLabels.removeLast();
+    hybridScores.removeLast();
   }
 }

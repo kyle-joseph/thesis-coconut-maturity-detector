@@ -1,9 +1,13 @@
 import 'package:audio_wave/audio_wave.dart';
 import 'package:coconut_maturity_detector/components/theme.dart';
-import 'package:coconut_maturity_detector/screens/prediction/prediction.dart';
+import 'package:coconut_maturity_detector/screens/hybrid/prediction.dart';
+import 'package:coconut_maturity_detector/services/global_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tflite_audio/tflite_audio.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:toast/toast.dart';
 
 // ignore: use_key_in_widget_constructors
 class AcousticBody extends StatefulWidget {
@@ -136,21 +140,34 @@ class _AcousticBodyState extends State<AcousticBody> {
             }
             _sound = labels[idx];
 
-            // ignore: avoid_print
-            print(max);
-            // _sound = recognition;
+            Provider.of<ApplicationState>(context, listen: false)
+                .setHybridLabels(_sound);
+            Provider.of<ApplicationState>(context, listen: false)
+                .setHybridScores(max);
 
-            // ignore: avoid_print
-            print(finalResults);
-            Navigator.pushReplacement(
-              context,
-              CupertinoPageRoute(
-                builder: (context) => PredictionScreen(
-                  prediction: _sound,
-                  percentage: (max * 100).toStringAsFixed(2),
+            // // ignore: avoid_print
+            // print(max);
+            // // ignore: avoid_print
+            // print(finalResults);
+
+            if (_sound != 'Background Noise') {
+              Navigator.pushReplacement(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => HybridPredictionScreen(),
                 ),
-              ),
-            );
+              );
+            } else {
+              Toast.show(
+                "Cannot save 'Background' prediction. Try again.",
+                context,
+                duration: 3,
+                gravity: Toast.BOTTOM,
+                backgroundColor: AppTheme.errorColor,
+              );
+              Provider.of<ApplicationState>(context, listen: false)
+                  .removeAcousticLabelAndScore();
+            }
           },
         );
       }

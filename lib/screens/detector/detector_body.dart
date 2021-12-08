@@ -1,8 +1,11 @@
 import 'package:coconut_maturity_detector/components/theme.dart';
 import 'package:coconut_maturity_detector/screens/acoustic/acoustic.dart';
+import 'package:coconut_maturity_detector/screens/hybrid/image_detector.dart';
 import 'package:coconut_maturity_detector/screens/image/image_detector.dart';
+import 'package:coconut_maturity_detector/services/global_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore: use_key_in_widget_constructors
 class DetectorBody extends StatefulWidget {
@@ -13,6 +16,9 @@ class DetectorBody extends StatefulWidget {
 class _DetectorBodyState extends State<DetectorBody> {
   @override
   Widget build(BuildContext context) {
+    // ignore: sized_box_for_whitespace
+    Provider.of<ApplicationState>(context, listen: false)
+        .clearHybridLabelsAndScores();
     // ignore: sized_box_for_whitespace
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -83,14 +89,28 @@ class _DetectorBodyState extends State<DetectorBody> {
                             ImageDetector(),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 20,
+                          ),
+                          child: detectorButton(
+                            context,
+                            'Audio',
+                            const Icon(
+                              Icons.mic,
+                              size: 40,
+                            ),
+                            AcousticScreen(),
+                          ),
+                        ),
                         detectorButton(
                           context,
-                          'Audio',
+                          'Hybrid',
                           const Icon(
-                            Icons.mic,
+                            Icons.merge_type,
                             size: 40,
                           ),
-                          AcousticScreen(),
+                          HybridImageDetector(),
                         )
                       ],
                     ),
