@@ -191,10 +191,13 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
         (await getExternalStorageDirectory())!.path,
         '${DateTime.now()}.jpg',
       );
+
       final image = await _cameraController.takePicture();
+
       ImageProperties properties =
           await FlutterNativeImage.getImageProperties(image.path);
       var size = 224 * 3.5;
+
       // ignore: non_constant_identifier_names
       var offset_x = (properties.width! - size) / 2;
       var offset_y = (properties.height! - size) / 2;
@@ -208,7 +211,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
       var prediction = await Tflite.runModelOnImage(
         path: croppedFile.path,
         numResults: 3,
-        threshold: 0.05,
+        threshold: 0.4,
         imageMean: 127.5,
         imageStd: 127.5,
       );
@@ -238,7 +241,7 @@ class _ImageDetectorBodyState extends State<ImageDetectorBody> {
         model: "assets/model/coconut_image_augmented.tflite",
         labels: "assets/model/labels.txt");
     // ignore: avoid_print
-    print("Hello World: $res");
+    print(res);
   }
 
   @override

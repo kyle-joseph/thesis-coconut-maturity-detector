@@ -88,8 +88,8 @@ class _AcousticBodyState extends State<AcousticBody> {
   }
 
   void _recorder() async {
-    List finalResults = [];
-    List recognitionResults = [];
+    List finalResults = []; // list of double data type
+    List recognitionResults = []; // list of string data type
     var recognition = '';
     double max = 0.0;
     int idx = 0;
@@ -103,13 +103,7 @@ class _AcousticBodyState extends State<AcousticBody> {
           bufferSize: 22050,
           numOfInferences: 3,
         );
-        // result = TfliteAudio.startAudioRecognition(
-        //   inputType: 'rawAudio',
-        //   sampleRate: 48000,
-        //   recordingLength: 144000,
-        //   bufferSize: 24000,
-        //   numOfInferences: 1,
-        // );
+
         result.listen((event) {
           recognition = event["recognitionResult"];
         }).onDone(
@@ -125,9 +119,15 @@ class _AcousticBodyState extends State<AcousticBody> {
             recognition = recognition.replaceAll(']', '');
             recognitionResults = recognition.split(',');
 
+            print('Recognition: $recognition');
+            print('RecognitionResults: $recognitionResults');
+
+            //convert string to double
             for (int x = 0; x < recognitionResults.length; x++) {
               finalResults.add(double.parse(recognitionResults[x]));
             }
+
+            //find the max value in a list
             for (int x = 0; x < finalResults.length; x++) {
               if (finalResults[x] > max) {
                 max = finalResults[x];

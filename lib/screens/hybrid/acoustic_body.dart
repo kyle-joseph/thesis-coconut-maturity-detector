@@ -107,13 +107,7 @@ class _AcousticBodyState extends State<AcousticBody> {
           bufferSize: 22050,
           numOfInferences: 3,
         );
-        // result = TfliteAudio.startAudioRecognition(
-        //   inputType: 'rawAudio',
-        //   sampleRate: 48000,
-        //   recordingLength: 144000,
-        //   bufferSize: 24000,
-        //   numOfInferences: 1,
-        // );
+
         result.listen((event) {
           recognition = event["recognitionResult"];
         }).onDone(
@@ -128,6 +122,8 @@ class _AcousticBodyState extends State<AcousticBody> {
             recognition = recognition.replaceAll('[', '');
             recognition = recognition.replaceAll(']', '');
             recognitionResults = recognition.split(',');
+            print('Recognition: $recognition');
+            print('RecognitionResults: $recognitionResults');
 
             for (int x = 0; x < recognitionResults.length; x++) {
               finalResults.add(double.parse(recognitionResults[x]));
@@ -144,11 +140,6 @@ class _AcousticBodyState extends State<AcousticBody> {
                 .setHybridLabels(_sound);
             Provider.of<ApplicationState>(context, listen: false)
                 .setHybridScores(max);
-
-            // // ignore: avoid_print
-            // print(max);
-            // // ignore: avoid_print
-            // print(finalResults);
 
             if (_sound != 'Background Noise') {
               Navigator.pushReplacement(

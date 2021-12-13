@@ -210,9 +210,6 @@ class _HybridPredictionScreenState extends State<HybridPredictionScreen> {
         break;
     }
 
-    print(imgWeight);
-    print(acsWeight);
-
     weightedScores.add(hybridScores[0] * imgWeight);
     weightedScores.add(hybridScores[1] * acsWeight);
 
@@ -222,13 +219,6 @@ class _HybridPredictionScreenState extends State<HybridPredictionScreen> {
         maxIdx = x;
       }
     }
-
-    // ignore: avoid_print
-    print(hybridLabels);
-    // ignore: avoid_print
-    print(hybridScores);
-    // ignore: avoid_print
-    print(weightedScores);
 
     setState(() {
       prediction = hybridLabels[maxIdx];
